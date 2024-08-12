@@ -112,7 +112,7 @@ const frameHandler = frames(async (ctx) => {
       user.profileImageContentValue?.image?.extraSmall || user.profileImage;
 
     // Prepare data for the chart
-    const chartData = data.hourlySnapshots.slice(-24); // Last 24 hours
+    const chartData = data.hourlySnapshots.slice(-24); // Last 72 hours
     const prices = chartData.map(
       (snapshot: { price: number }) => snapshot.price
     );
@@ -120,7 +120,7 @@ const frameHandler = frames(async (ctx) => {
     const maxPrice = Math.max(...prices);
     const priceRange = maxPrice - minPrice;
 
-    // Calculate price change
+    // Calculate price change and earliest price
     const latestPrice = prices[prices.length - 1];
     const earliestPrice = prices[0];
     const priceChange = ((latestPrice - earliestPrice) / earliestPrice) * 100;
@@ -183,9 +183,9 @@ const frameHandler = frames(async (ctx) => {
           </div>
 
           <div tw="relative flex">
-            {/* <div tw="absolute top-2 left-2 text-white text-5xl font-bold text-purple-100">
-              All Time
-            </div> */}
+            <div tw="absolute top-0 left-2 text-white text-3xl font-bold">
+              LAST 24 HOURS
+            </div>
             <svg width={chartWidth} height={chartHeight}>
               <defs>
                 <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -208,16 +208,29 @@ const frameHandler = frames(async (ctx) => {
 
           <div tw="flex justify-between mt-4 text-lg">
             <div tw="flex flex-col">
-              <div tw="flex text-xl">24h Low: ${minPrice.toFixed(4)}</div>
-              <div tw="flex mb-2 text-xl">24h High: ${maxPrice.toFixed(4)}</div>
+              <div tw="flex text-2xl mt-2">
+                Starting Price (24h): ${earliestPrice.toFixed(4)}
+              </div>
+              <div tw="flex text-2xl mb-4">
+                Variance: ${minPrice.toFixed(4)} (Low) / ${maxPrice.toFixed(4)}{" "}
+                (High)
+              </div>
+              {/* <div tw="flex text-xl">24h High: </div> */}
             </div>
             <div tw="flex flex-col items-end">
-              <div tw="flex mb-2 text-xl">
-                Total Supply:{" "}
-                {(data.tokenInfo.totalSupply / SUPPLY_DIVIDER).toFixed(2)}
-              </div>
-              <div tw="flex mb-2 text-xl">
-                Unique Holders: {data.tokenInfo.uniqueHolders.toLocaleString()}
+              {/* <div tw="flex">
+                <div tw="flex text-xl mr-2">
+                  Supply:{" "}
+                  {(data.tokenInfo.totalSupply / SUPPLY_DIVIDER).toFixed(2)}
+                </div>
+                <div> | </div>
+                <div tw="flex text-xl ml-2">
+                  Unique Holders:{" "}
+                  {data.tokenInfo.uniqueHolders.toLocaleString()}
+                </div>
+              </div> */}
+              <div tw="flex text-xl mt-12">
+                Frame by Zenigame (@leeknowlton.eth)
               </div>
             </div>
           </div>
@@ -227,15 +240,15 @@ const frameHandler = frames(async (ctx) => {
       buttons: [
         <Button
           action="post"
-          target={{ pathname: "/", query: { action: "search" } }}
-        >
-          🔎 Search
-        </Button>,
-        <Button
-          action="post"
           target={{ pathname: "/", query: { action: "random" } }}
         >
           🎲 Random
+        </Button>,
+        <Button
+          action="post"
+          target={{ pathname: "/", query: { action: "search" } }}
+        >
+          🔎 Search
         </Button>,
         <Button action="link" target={buySellUrl}>
           ⚡️ Trade
