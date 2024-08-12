@@ -6,8 +6,13 @@ const graphQLClient = new GraphQLClient(
 );
 
 const HOURLY_SNAPSHOTS_QUERY = gql`
-  query HourlySnapshots($fanTokenAddress: String!) {
-    subjectTokens(where: { id: $fanTokenAddress }) {
+  query HourlySnapshots($symbol: String!) {
+    subjectTokens(where: { symbol: $symbol }) {
+      id
+      symbol
+      totalSupply
+      uniqueHolders
+      lifetimeVolume
       hourlySnapshots(orderBy: endTimestamp, orderDirection: asc, first: 1000) {
         endTimestamp
         endPrice
@@ -18,6 +23,11 @@ const HOURLY_SNAPSHOTS_QUERY = gql`
 
 interface HourlySnapshotResponse {
   subjectTokens: Array<{
+    id: string;
+    symbol: string;
+    totalSupply: string;
+    uniqueHolders: string;
+    lifetimeVolume: string;
     hourlySnapshots: Array<{
       endTimestamp: string;
       endPrice: string;
@@ -27,33 +37,49 @@ interface HourlySnapshotResponse {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const fanTokenAddress = searchParams.get("fanTokenAddress");
+  const symbol = searchParams.get("symbol");
+  console.log(symbol);
 
-  if (!fanTokenAddress) {
-    return NextResponse.json(
-      { error: "fanTokenAddress is required" },
-      { status: 400 }
-    );
+  if (!symbol) {
+    return NextResponse.json({ error: "symbol is required" }, { status: 400 });
   }
 
   try {
     const data = await graphQLClient.request<HourlySnapshotResponse>(
       HOURLY_SNAPSHOTS_QUERY,
       {
-        fanTokenAddress,
+        symbol: symbol,
       }
     );
 
-    const processedData =
-      data.subjectTokens[0]?.hourlySnapshots.map((snapshot: any) => ({
-        date: new Date(
-          parseInt(snapshot.endTimestamp, 10) * 1000
-        ).toISOString(),
-        price: parseFloat(snapshot.endPrice),
-      })) || [];
+    const subjectToken = data.subjectTokens[0];
+    if (!subjectToken) {
+      return NextResponse.json(
+        { error: "Fan token not found" },
+        { status: 404 }
+      );
+    }
 
-    console.log(`Returning ${processedData.length} snapshots`);
-    return NextResponse.json({ hourlySnapshots: processedData });
+    const processedData = subjectToken.hourlySnapshots.map((snapshot) => ({
+      date: new Date(parseInt(snapshot.endTimestamp, 10) * 1000).toISOString(),
+      price: parseFloat(snapshot.endPrice),
+    }));
+
+    const response = {
+      tokenInfo: {
+        address: subjectToken.id,
+        symbol: subjectToken.symbol,
+        totalSupply: parseFloat(subjectToken.totalSupply),
+        uniqueHolders: parseInt(subjectToken.uniqueHolders, 10),
+        lifetimeVolume: parseFloat(subjectToken.lifetimeVolume),
+      },
+      hourlySnapshots: processedData,
+    };
+
+    console.log(
+      `Returning data for ${response.tokenInfo.symbol} with ${processedData.length} snapshots`
+    );
+    return NextResponse.json(response);
   } catch (error: any) {
     console.error("Error fetching hourly snapshots:", error);
     return NextResponse.json(
