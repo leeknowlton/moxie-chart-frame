@@ -85,7 +85,7 @@ const frameHandler = frames(async (ctx) => {
             action="post"
             target={{ pathname: "/", query: { action: "random" } }}
           >
-            🎲 Random
+            Random
           </Button>,
           <Button
             action="post"
@@ -235,7 +235,7 @@ const frameHandler = frames(async (ctx) => {
           action="post"
           target={{ pathname: "/", query: { action: "random" } }}
         >
-          🎲 Random
+          Random
         </Button>,
         <Button
           action="post"
@@ -244,7 +244,7 @@ const frameHandler = frames(async (ctx) => {
           🔎 Search
         </Button>,
         <Button action="link" target={buySellUrl}>
-          ⚡️ Trade
+          Trade
         </Button>,
         <Button action="link" target={shareUrl}>
           Share
