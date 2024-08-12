@@ -12,9 +12,11 @@ const frameHandler = frames(async (ctx) => {
   if (ctx.message?.inputText) {
     // Handle search input
     const input = ctx.message.inputText.trim();
-    if (input.startsWith("@")) {
-      // Search by username
-      const profileName = input.slice(1).toLowerCase();
+    if (input.startsWith("@") || isNaN(Number(input))) {
+      // Search by username (with or without '@')
+      const profileName = input.startsWith("@")
+        ? input.slice(1).toLowerCase()
+        : input.toLowerCase();
       const fid = USERNAME_FID_MAP.get(profileName);
       if (fid) {
         symbol = `fid:${fid}`;
