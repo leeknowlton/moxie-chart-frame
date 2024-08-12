@@ -156,6 +156,9 @@ const frameHandler = frames(async (ctx) => {
       symbol.split(":")[1]
     }`;
 
+    // Get current timestamp
+    const currentTimestamp = new Date().toISOString();
+
     return {
       image: (
         <div tw="flex flex-col p-8 bg-gray-900 text-white font-sans w-full h-full">
@@ -209,29 +212,19 @@ const frameHandler = frames(async (ctx) => {
           <div tw="flex justify-between mt-4 text-lg">
             <div tw="flex flex-col">
               <div tw="flex text-2xl mt-2">
-                Starting Price (24h): ${earliestPrice.toFixed(4)}
+                Earliest Price: ${earliestPrice.toFixed(4)}
               </div>
               <div tw="flex text-2xl mb-4">
-                Variance: ${minPrice.toFixed(4)} (Low) / ${maxPrice.toFixed(4)}{" "}
+                24h: ${minPrice.toFixed(4)} (Low) / ${maxPrice.toFixed(4)}{" "}
                 (High)
               </div>
-              {/* <div tw="flex text-xl">24h High: </div> */}
+              <div tw="flex text-xl">Total Snapshots: {chartData.length}</div>
             </div>
             <div tw="flex flex-col items-end">
-              {/* <div tw="flex">
-                <div tw="flex text-xl mr-2">
-                  Supply:{" "}
-                  {(data.tokenInfo.totalSupply / SUPPLY_DIVIDER).toFixed(2)}
-                </div>
-                <div> | </div>
-                <div tw="flex text-xl ml-2">
-                  Unique Holders:{" "}
-                  {data.tokenInfo.uniqueHolders.toLocaleString()}
-                </div>
-              </div> */}
-              <div tw="flex text-xl mt-12">
+              <div tw="flex text-xl mt-8">
                 Frame by Zenigame (@leeknowlton.eth)
               </div>
+              <div tw="flex text-sm text-gray-400">{currentTimestamp}</div>
             </div>
           </div>
         </div>
