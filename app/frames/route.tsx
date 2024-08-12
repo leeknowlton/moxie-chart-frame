@@ -83,21 +83,15 @@ const frameHandler = frames(async (ctx) => {
         buttons: [
           <Button
             action="post"
-            target={{ pathname: "/", query: { action: "search" } }}
-          >
-            🔎 Search Another
-          </Button>,
-          <Button
-            action="post"
-            target={{ pathname: "/", query: { action: "my_token" } }}
-          >
-            My Token
-          </Button>,
-          <Button
-            action="post"
             target={{ pathname: "/", query: { action: "random" } }}
           >
-            Random
+            🎲 Random
+          </Button>,
+          <Button
+            action="post"
+            target={{ pathname: "/", query: { action: "search" } }}
+          >
+            🔎 Search
           </Button>,
         ],
         state: { symbol: symbol },
@@ -147,16 +141,16 @@ const frameHandler = frames(async (ctx) => {
     const SUPPLY_DIVIDER = 1000000000000000000;
 
     const shareText = encodeURIComponent(
-      `Check out ${displayName}'s Fan Token ($${latestPrice.toFixed(
+      `${displayName}'s Fan Token is now at $${latestPrice.toFixed(
         4
-      )}) on MoxieRank! 24h change: ${priceChange.toFixed(2)}%`
+      )} per token. Here's the all-time chart, made by @leeknowlton.eth . Is it time to send it higher?`
     );
     const shareUrl = `https://warpcast.com/~/compose?text=${shareText}&embeds[]=https://moxie-chart-frame.vercel.app/frames?fid=${
       symbol.split(":")[1]
     }`;
 
     const buySellText = encodeURIComponent(
-      `I saw the Fan Token chart 📈 from @leeknowlton.eth! Time to swap some @${username} tokens with this frame.`
+      `I saw the Fan Token chart 📈 from @leeknowlton.eth! Time to swap some @${username} tokens with this frame. Join me?`
     );
     const buySellUrl = `https://warpcast.com/~/compose?text=${buySellText}&embeds[]=https://moxie-frames.airstack.xyz/stim?t=fid_${
       symbol.split(":")[1]
@@ -214,8 +208,8 @@ const frameHandler = frames(async (ctx) => {
 
           <div tw="flex justify-between mt-4 text-lg">
             <div tw="flex flex-col">
-              <div tw="flex mb-2 text-xl">24h High: ${maxPrice.toFixed(4)}</div>
               <div tw="flex text-xl">24h Low: ${minPrice.toFixed(4)}</div>
+              <div tw="flex mb-2 text-xl">24h High: ${maxPrice.toFixed(4)}</div>
             </div>
             <div tw="flex flex-col items-end">
               <div tw="flex mb-2 text-xl">
@@ -241,10 +235,10 @@ const frameHandler = frames(async (ctx) => {
           action="post"
           target={{ pathname: "/", query: { action: "random" } }}
         >
-          Random
+          🎲 Random
         </Button>,
         <Button action="link" target={buySellUrl}>
-          Buy / Sell
+          ⚡️ Trade
         </Button>,
         <Button action="link" target={shareUrl}>
           Share
