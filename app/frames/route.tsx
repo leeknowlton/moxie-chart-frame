@@ -59,7 +59,7 @@ const frameHandler = frames(async (ctx) => {
 
   // If symbol is still not set, use default
   if (!symbol) {
-    symbol = "fid:5650";
+    symbol = "fid:446697";
   }
 
   try {
