@@ -143,7 +143,7 @@ const frameHandler = frames(async (ctx) => {
     const SUPPLY_DIVIDER = 1000000000000000000;
 
     const shareText = encodeURIComponent(
-      `I love looking at charts go up and to the right. Here's a Moxie Fan Token frame to help you share in the enjoyment (or distress). Is it time to send this token higher? Made by @leeknowlton.eth.`
+      `I love looking at charts go up and to the right. Is it time to send this token higher? Made by @leeknowlton.eth.`
     );
     const shareUrl = `https://warpcast.com/~/compose?text=${shareText}&embeds[]=https://moxie-chart-frame.vercel.app/frames?fid=${
       symbol.split(":")[1]
