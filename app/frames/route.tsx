@@ -155,7 +155,7 @@ ${displayName}'s Fan Token is now at $${latestPrice.toFixed(
     const buySellText = encodeURIComponent(
       `I saw the Fan Token chart 📈 from @leeknowlton.eth! Time to swap some @${username} tokens with this frame. Join me?`
     );
-    const buySellUrl = `https://warpcast.com/~/compose?text=${buySellText}&embeds[]=https://moxie-frames.airstack.xyz/stim?t=fid_${
+    const buySellUrl = `https://moxie-frames.airstack.xyz/stim?t=fid_${
       symbol.split(":")[1]
     }`;
 
@@ -246,8 +246,8 @@ ${displayName}'s Fan Token is now at $${latestPrice.toFixed(
         >
           🔎 Search
         </Button>,
-        <Button action="link" target={buySellUrl}>
-          Trade
+        <Button action="post" target={buySellUrl}>
+          ⚡️ Trade
         </Button>,
         <Button action="link" target={shareUrl}>
           Share
