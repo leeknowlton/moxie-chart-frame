@@ -4,10 +4,11 @@ import { appURL } from "../utils";
 import moxieResolveData from "../../moxie_resolve_data.json";
 import randomData from "../../output_file.json";
 
-// Add type assertions
 const typedMoxieResolveData = moxieResolveData as Array<{
   profileName: string;
-  fid: string;
+  fid: number;
+  address: string;
+  type: string;
 }>;
 const typedRandomData = randomData as [string, number][];
 
@@ -15,7 +16,7 @@ const typedRandomData = randomData as [string, number][];
 const USERNAME_FID_MAP = new Map(
   typedMoxieResolveData.map((entry) => [
     entry.profileName.toLowerCase(),
-    entry.fid,
+    entry.fid.toString(),
   ])
 );
 
