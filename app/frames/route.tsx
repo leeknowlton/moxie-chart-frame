@@ -1,22 +1,39 @@
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
 import { appURL } from "../utils";
-import mappings from "../../output_file.json";
+import moxieResolveData from "../../moxie_resolve_data.json";
+import randomData from "../../output_file.json";
 
-// Add this new constant
-const USERNAME_FID_MAP = new Map(mappings as [string, number][]);
+// Add type assertions
+const typedMoxieResolveData = moxieResolveData as Array<{
+  profileName: string;
+  fid: string;
+}>;
+const typedRandomData = randomData as [string, number][];
+
+// Create a Map from the moxie_resolve_data.json file
+const USERNAME_FID_MAP = new Map(
+  typedMoxieResolveData.map((entry) => [
+    entry.profileName.toLowerCase(),
+    entry.fid,
+  ])
+);
+
+// Function to get random entry
+const getRandomEntry = () => {
+  const randomIndex = Math.floor(Math.random() * typedRandomData.length);
+  return typedRandomData[randomIndex];
+};
 
 const frameHandler = frames(async (ctx) => {
   let symbol;
 
   if (ctx.message?.inputText) {
     // Handle search input
-    const input = ctx.message.inputText.trim();
+    const input = ctx.message.inputText.trim().toLowerCase();
     if (input.startsWith("@") || isNaN(Number(input))) {
       // Search by username (with or without '@')
-      const profileName = input.startsWith("@")
-        ? input.slice(1).toLowerCase()
-        : input.toLowerCase();
+      const profileName = input.startsWith("@") ? input.slice(1) : input;
       const fid = USERNAME_FID_MAP.get(profileName);
       if (fid) {
         symbol = `fid:${fid}`;
@@ -31,8 +48,7 @@ const frameHandler = frames(async (ctx) => {
     }
   } else if (ctx.searchParams?.action === "random") {
     // Handle "Random" button click
-    const randomIndex = Math.floor(Math.random() * mappings.length);
-    const [username, fid] = mappings[randomIndex];
+    const [profileName, fid] = getRandomEntry();
     symbol = `fid:${fid}`;
   } else if (ctx.message?.requesterFid) {
     // Use requester's FID for "My Token" action
