@@ -48,8 +48,6 @@ export async function GET(request: Request) {
       }
     );
 
-    // console.log("Raw GraphQL response:", JSON.stringify(data, null, 2));
-
     const subjectToken = data.subjectTokens[0];
     if (!subjectToken) {
       console.log("No subject token found for symbol:", symbol);

@@ -4,6 +4,7 @@ import { appURL } from "../utils";
 import moxieResolveData from "../../moxie_resolve_data.json";
 import randomData from "../../output_file.json";
 
+// Correct type assertions
 const typedMoxieResolveData = moxieResolveData as Array<{
   profileName: string;
   fid: number;
@@ -47,12 +48,8 @@ const frameHandler = frames(async (ctx) => {
     } else {
       symbol = input;
     }
-  } else if (ctx.searchParams?.action === "random") {
-    // Handle "Random" button click
-    const [profileName, fid] = getRandomEntry();
-    symbol = `fid:${fid}`;
   } else if (ctx.message?.requesterFid) {
-    // Use requester's FID for "My Token" action
+    // Use requester's FID for "Show Me" action
     symbol = `fid:${ctx.message.requesterFid}`;
   }
 
@@ -102,9 +99,9 @@ const frameHandler = frames(async (ctx) => {
         buttons: [
           <Button
             action="post"
-            target={{ pathname: "/", query: { action: "random" } }}
+            target={{ pathname: "/", query: { action: "view_me" } }}
           >
-            Random
+            Show Me
           </Button>,
           <Button
             action="post"
@@ -157,18 +154,15 @@ const frameHandler = frames(async (ctx) => {
       })
       .join(" ");
 
-    const SUPPLY_DIVIDER = 1000000000000000000;
+    // const SUPPLY_DIVIDER = 1000000000000000000;
 
     const shareText = encodeURIComponent(
-      `I love looking at charts go up and to the right. Is it time to send this token higher? Made by @leeknowlton.eth.`
+      `Is it time to send this token higher? Frame by @zeni.eth`
     );
     const shareUrl = `https://warpcast.com/~/compose?text=${shareText}&embeds[]=https://moxie-chart-frame.vercel.app/frames?fid=${
       symbol.split(":")[1]
     }`;
 
-    const buySellText = encodeURIComponent(
-      `I saw the Fan Token chart 📈 from @leeknowlton.eth! Time to swap some @${username} tokens with this frame. Join me?`
-    );
     const buySellUrl = `https://moxie-frames.airstack.xyz/stim?t=fid_${
       symbol.split(":")[1]
     }`;
@@ -181,12 +175,12 @@ const frameHandler = frames(async (ctx) => {
         <div tw="flex flex-col p-8 bg-gray-900 text-white font-sans w-full h-full">
           <div tw="flex justify-between items-center mb-4">
             <div tw="flex items-center">
-              <img src={profileImage} tw="w-16 h-16 rounded-full mr-4" />
+              <img src={profileImage} tw="w-24 h-24 rounded-full mr-4" />
               <div tw="flex flex-col">
-                <h2 tw="flex text-3xl font-bold m-0">
-                  {displayName} Fan Token
-                </h2>
-                <p tw="flex text-xl text-gray-400 m-0">@{username}</p>
+                <h2 tw="flex text-4xl font-bold m-0">@{username}</h2>
+                <p tw="flex text-3xl text-gray-400 m-0">
+                  Fan Token Price Chart
+                </p>
               </div>
             </div>
             <div tw="flex flex-col items-end">
@@ -203,9 +197,9 @@ const frameHandler = frames(async (ctx) => {
           </div>
 
           <div tw="relative flex">
-            <div tw="absolute top-0 left-2 text-white text-3xl font-bold">
-              LAST 24 HOURS
-            </div>
+            {/* <div tw="absolute top-0 left-2 text-white text-6xl font-bold opacity-50">
+              Fan Token Price Trend
+            </div> */}
             <svg width={chartWidth} height={chartHeight}>
               <defs>
                 <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -228,20 +222,12 @@ const frameHandler = frames(async (ctx) => {
 
           <div tw="flex justify-between mt-4 text-lg">
             <div tw="flex flex-col">
-              <div tw="flex text-2xl mt-2">
-                Earliest Price: ${earliestPrice.toFixed(4)}
-              </div>
-              <div tw="flex text-2xl mb-4">
-                24h: ${minPrice.toFixed(4)} (Low) / ${maxPrice.toFixed(4)}{" "}
-                (High)
-              </div>
-              <div tw="flex text-xl">Total Snapshots: {chartData.length}</div>
+              {/* <div tw="flex text-2xl mt-2">
+                Starting Price: ${earliestPrice.toFixed(4)}
+              </div> */}
             </div>
             <div tw="flex flex-col items-end">
-              <div tw="flex text-xl mt-8">
-                Frame by Zenigame (@leeknowlton.eth)
-              </div>
-              <div tw="flex text-sm text-gray-400">{currentTimestamp}</div>
+              <div tw="flex text-xl mt-8">MoxieScout</div>
             </div>
           </div>
         </div>
@@ -250,9 +236,9 @@ const frameHandler = frames(async (ctx) => {
       buttons: [
         <Button
           action="post"
-          target={{ pathname: "/", query: { action: "random" } }}
+          target={{ pathname: "/", query: { action: "view_me" } }}
         >
-          Random
+          Show Me
         </Button>,
         <Button
           action="post"
@@ -291,9 +277,9 @@ const frameHandler = frames(async (ctx) => {
         </Button>,
         <Button
           action="post"
-          target={{ pathname: "/", query: { action: "my_token" } }}
+          target={{ pathname: "/", query: { action: "view_me" } }}
         >
-          My Token
+          Show Me
         </Button>,
       ],
       state: { symbol: symbol },
