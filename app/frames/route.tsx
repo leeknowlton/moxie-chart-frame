@@ -83,13 +83,18 @@ const frameHandler = frames(async (ctx) => {
     );
     const data = await response.json();
 
-    if (!data || !data.tokenInfo) {
-      // No fan token found, return the "No fan token yet" page
+    if (
+      !data ||
+      !data.tokenInfo ||
+      !data.hourlySnapshots ||
+      data.hourlySnapshots.length === 0
+    ) {
+      // No fan token found or no hourly snapshots, return the "No fan token yet" page
       return {
         image: (
           <div tw="flex flex-col p-8 bg-gray-900 text-white font-sans w-full h-full items-center justify-center">
             <h1 tw="text-6xl font-bold mb-4">No Fan Token Yet</h1>
-            <p tw="text-4xl mb-8">
+            <p tw="text-4xl mb-8 text-center">
               This user doesn't have a Fan Token, or their auction is still
               ongoing.
             </p>
@@ -128,10 +133,15 @@ const frameHandler = frames(async (ctx) => {
       user.profileImageContentValue?.image?.extraSmall || user.profileImage;
 
     // Prepare data for the chart
-    const chartData = data.hourlySnapshots.slice(-24); // Last 72 hours
+    const chartData = data.hourlySnapshots.slice(-24); // Last 24 hours
     const prices = chartData.map(
       (snapshot: { price: number }) => snapshot.price
     );
+
+    if (prices.length === 0) {
+      throw new Error("No price data available");
+    }
+
     const minPrice = Math.min(...prices);
     const maxPrice = Math.max(...prices);
     const priceRange = maxPrice - minPrice;
