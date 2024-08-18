@@ -12,8 +12,7 @@ export const GET = async (req: NextRequest) => {
     icon: "pulse",
     name: "Fan Token Chart",
     aboutUrl: `${appURL()}`,
-    description:
-      "Check the price changes of Moxie Fan Tokens and buy/sell them.",
+    description: "Check the price chart of a Fan Token. Buy or sell in frame.",
   });
 };
 
