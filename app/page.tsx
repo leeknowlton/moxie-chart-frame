@@ -4,12 +4,12 @@ import { appURL } from "./utils";
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: { userfid?: string };
+  searchParams: { fid?: string };
 }) {
   const framesUrl = new URL("/frames", appURL());
 
-  if (searchParams.userfid) {
-    framesUrl.searchParams.set("userfid", searchParams.userfid);
+  if (searchParams.fid) {
+    framesUrl.searchParams.set("fid", searchParams.fid);
     framesUrl.searchParams.set("action", "fetch");
   }
 
