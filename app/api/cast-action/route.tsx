@@ -19,5 +19,5 @@ export const GET = async (req: NextRequest) => {
 
 export const POST = frames(async (ctx) => {
   console.log("Cast Action FID: " + ctx.message?.castId?.fid);
-  return castActionFrame(`${appURL()}?userfid=${ctx.message?.castId?.fid}`);
+  return castActionFrame(`${appURL()}?fid=${ctx.message?.castId?.fid}`);
 });
