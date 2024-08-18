@@ -10,7 +10,7 @@ export const GET = async (req: NextRequest) => {
       type: "post",
     },
     icon: "pulse",
-    name: "Moxie Fan Token Graph",
+    name: "Fan Token Graph",
     aboutUrl: `${appURL()}`,
     description:
       "Check the price changes of Moxie Fan Tokens and buy/sell them.",
