@@ -15,7 +15,7 @@ export async function generateMetadata({
 
   console.log("Fetching metadata from:", framesUrl.toString());
 
-  // const castActionUrl = new URL("/api/cast-action", appURL());
+  const castActionUrl = new URL("/api/cast-action", appURL());
 
   return {
     title: "Moxie Fan Token Chart",
@@ -27,7 +27,7 @@ export async function generateMetadata({
     },
     other: {
       ...(await fetchMetadata(framesUrl)),
-      // "fc:frame:cast_action:url": castActionUrl.toString(),
+      "fc:frame:cast_action:url": castActionUrl.toString(),
     },
   };
 }
