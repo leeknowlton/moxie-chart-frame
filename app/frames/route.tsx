@@ -13,7 +13,6 @@ const typedMoxieResolveData = moxieResolveData as Array<{
 }>;
 const typedRandomData = randomData as [string, number][];
 
-// Create a Map from the moxie_resolve_data.json file
 const USERNAME_FID_MAP = new Map(
   typedMoxieResolveData.map((entry) => [
     entry.profileName.toLowerCase(),
@@ -21,40 +20,30 @@ const USERNAME_FID_MAP = new Map(
   ])
 );
 
-// Function to get random entry
-const getRandomEntry = () => {
-  const randomIndex = Math.floor(Math.random() * typedRandomData.length);
-  return typedRandomData[randomIndex];
-};
-
 const frameHandler = frames(async (ctx) => {
   let symbol;
 
   if (ctx.message?.inputText) {
-    // Handle search input
     const input = ctx.message.inputText.trim().toLowerCase();
     if (input.startsWith("@") || isNaN(Number(input))) {
-      // Search by username (with or without '@')
       const profileName = input.startsWith("@") ? input.slice(1) : input;
       const fid = USERNAME_FID_MAP.get(profileName);
       if (fid) {
         symbol = `fid:${fid}`;
       } else {
-        symbol = input; // Keep the input as is if not found
+        symbol = input;
       }
     } else if (!isNaN(Number(input))) {
-      // Search by FID
       symbol = `fid:${input}`;
     } else {
       symbol = input;
     }
   } else if (ctx.message?.requesterFid) {
-    // Use requester's FID for "Show Me" action
     symbol = `fid:${ctx.message.requesterFid}`;
   }
 
-  // If symbol is still not set, try to extract FID from URL
   if (!symbol && ctx.url) {
+    console.log("parsing url");
     const extractFid = (url: string): string | null => {
       try {
         const parsedUrl = new URL(url);
@@ -67,6 +56,7 @@ const frameHandler = frames(async (ctx) => {
 
     const fid = extractFid(ctx.url.toString());
     if (fid) {
+      console.log("Extracted fid from params. FID: " + fid);
       symbol = `fid:${fid}`;
     }
   }
@@ -104,9 +94,9 @@ const frameHandler = frames(async (ctx) => {
         buttons: [
           <Button
             action="post"
-            target={{ pathname: "/", query: { action: "view_me" } }}
+            target={{ pathname: "/", query: { action: "show_me_or_search" } }}
           >
-            Show Me
+            Show Me / 🔎
           </Button>,
           <Button
             action="post"
@@ -246,18 +236,19 @@ const frameHandler = frames(async (ctx) => {
       buttons: [
         <Button
           action="post"
-          target={{ pathname: "/", query: { action: "view_me" } }}
+          target={{ pathname: "/", query: { action: "show_me_or_search" } }}
         >
-          Show Me
-        </Button>,
-        <Button
-          action="post"
-          target={{ pathname: "/", query: { action: "search" } }}
-        >
-          🔎 Search
+          Show Me / 🔎
         </Button>,
         <Button action="post" target={buySellUrl}>
           ⚡️ Trade
+        </Button>,
+        <Button
+          action="link"
+          // Change the url here
+          target="https://warpcast.com/~/add-cast-action?url=https%3A%2F%2Fmoxie-chart-frame.vercel.app%2Fapi%2Fcast-action"
+        >
+          Install
         </Button>,
         <Button action="link" target={shareUrl}>
           Share

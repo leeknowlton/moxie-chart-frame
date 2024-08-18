@@ -65,10 +65,10 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    console.log(
-      "Airstack API response:",
-      JSON.stringify(userData.data, null, 2)
-    );
+    // console.log(
+    //   "Airstack API response:",
+    //   JSON.stringify(userData.data, null, 2)
+    // );
 
     return NextResponse.json({ userData: userData.data });
   } catch (error) {
