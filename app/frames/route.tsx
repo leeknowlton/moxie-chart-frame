@@ -241,7 +241,7 @@ const frameHandler = frames(async (ctx) => {
           action="post"
           target={{ pathname: "/", query: { action: "show_me_or_search" } }}
         >
-          Me / 🔎
+          🔎 / Me
         </Button>,
         <Button action="post" target={buySellUrl}>
           ⚡️ Trade
