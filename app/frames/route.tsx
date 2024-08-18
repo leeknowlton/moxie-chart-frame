@@ -45,8 +45,10 @@ const frameHandler = frames(async (ctx) => {
   if (!symbol && ctx.url) {
     console.log("parsing url");
     const extractFid = (url: string): string | null => {
+      console.log("extracting FID");
       try {
         const parsedUrl = new URL(url);
+        console.log(parsedUrl);
         return parsedUrl.searchParams.get("fid");
       } catch (e) {
         console.error("Error parsing URL:", e);
@@ -55,6 +57,7 @@ const frameHandler = frames(async (ctx) => {
     };
 
     const fid = extractFid(ctx.url.toString());
+    console.log("Fid: " + fid);
     if (fid) {
       console.log("Extracted fid from params. FID: " + fid);
       symbol = `fid:${fid}`;
