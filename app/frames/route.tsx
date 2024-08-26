@@ -70,9 +70,12 @@ const frameHandler = frames(async (ctx) => {
   }
 
   try {
+    // Add timestamp for cache-busting
+    const timestamp = Date.now();
+
     // Fetch hourly snapshots data
     const response = await fetch(
-      `${appURL()}/api/hourly-snapshots?symbol=${symbol}`
+      `${appURL()}/api/hourly-snapshots?symbol=${symbol}&t=${timestamp}`
     );
     const data = await response.json();
 
@@ -114,7 +117,7 @@ const frameHandler = frames(async (ctx) => {
 
     // Fetch user data
     const userResponse = await fetch(
-      `${appURL()}/api/get-user-data?symbol=${symbol}`
+      `${appURL()}/api/get-user-data?symbol=${symbol}&t=${timestamp}`
     );
     const userData = await userResponse.json();
 
@@ -164,7 +167,7 @@ const frameHandler = frames(async (ctx) => {
     );
     const shareUrl = `https://warpcast.com/~/compose?text=${shareText}&embeds[]=https://moxie-chart-frame.vercel.app/frames?fid=${
       symbol.split(":")[1]
-    }`;
+    }&t=${timestamp}`;
 
     const buySellUrl = `https://moxie-frames.airstack.xyz/stim?t=fid_${
       symbol.split(":")[1]
@@ -251,7 +254,7 @@ const frameHandler = frames(async (ctx) => {
           // Change the url here
           target="https://warpcast.com/~/add-cast-action?url=https%3A%2F%2Fmoxie-chart-frame.vercel.app%2Fapi%2Fcast-action"
         >
-          Install
+          Cast Action
         </Button>,
         <Button action="link" target={shareUrl}>
           Share
