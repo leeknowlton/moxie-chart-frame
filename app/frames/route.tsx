@@ -254,7 +254,7 @@ const frameHandler = frames(async (ctx) => {
           // Change the url here
           target="https://warpcast.com/~/add-cast-action?url=https%3A%2F%2Fmoxie-chart-frame.vercel.app%2Fapi%2Fcast-action"
         >
-          Cast Action
+          Install
         </Button>,
         <Button action="link" target={shareUrl}>
           Share
