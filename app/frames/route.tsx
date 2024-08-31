@@ -167,7 +167,7 @@ const frameHandler = frames(async (ctx) => {
     );
     const shareUrl = `https://warpcast.com/~/compose?text=${shareText}&embeds[]=https://moxie-chart-frame.vercel.app/frames?fid=${
       symbol.split(":")[1]
-    }&t=${timestamp}`;
+    }&cache_bust=${timestamp}`;
 
     const buySellUrl = `https://moxie-frames.airstack.xyz/stim?t=fid_${
       symbol.split(":")[1]
