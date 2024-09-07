@@ -129,13 +129,22 @@ const frameHandler = frames(async (ctx) => {
       user.profileImageContentValue?.image?.extraSmall || user.profileImage;
 
     // Prepare data for the chart
-    const chartData = data.hourlySnapshots.slice(-24); // Last 24 hours
+    const now = new Date();
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+    const chartData = data.hourlySnapshots.filter(
+      (snapshot: { date: string; price: number }) => {
+        const snapshotDate = new Date(snapshot.date);
+        return snapshotDate >= sevenDaysAgo && snapshotDate <= now;
+      }
+    );
+
     const prices = chartData.map(
       (snapshot: { price: number }) => snapshot.price
     );
 
     if (prices.length === 0) {
-      throw new Error("No price data available");
+      throw new Error("No price data available for the last 7 days");
     }
 
     const minPrice = Math.min(...prices);
@@ -185,7 +194,7 @@ const frameHandler = frames(async (ctx) => {
               <div tw="flex flex-col">
                 <h2 tw="flex text-4xl font-bold m-0">@{username}</h2>
                 <p tw="flex text-3xl text-gray-400 m-0">
-                  Fan Token Price Chart
+                  Fan Token Price Chart (7 Days)
                 </p>
               </div>
             </div>
