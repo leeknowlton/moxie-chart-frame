@@ -69,6 +69,10 @@ const frameHandler = frames(async (ctx) => {
     symbol = "fid:446697";
   }
 
+  const buySellUrl = `https://moxie-frames.airstack.xyz/stim?t=fid_${
+    symbol.split(":")[1]
+  }`;
+
   try {
     // Add timestamp for cache-busting
     const timestamp = Date.now();
@@ -199,7 +203,7 @@ const frameHandler = frames(async (ctx) => {
               </div>
             </div>
             <div tw="flex flex-col items-end">
-              <div tw="flex text-4xl font-bold">${latestPrice.toFixed(4)}</div>
+              <div tw="flex text-4xl font-bold">{latestPrice.toFixed(4)}</div>
               <div
                 tw={`flex text-2xl font-semibold ${
                   priceChange >= 0 ? "text-green-500" : "text-red-500"
