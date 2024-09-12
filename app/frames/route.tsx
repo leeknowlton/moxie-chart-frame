@@ -303,7 +303,10 @@ const frameHandler = frames(async (ctx) => {
         </Button>,
       ],
       state: { symbol: symbol },
-      headers: { "cache-control": "max-age=1600" },
+      dynamic: true,
+      headers: {
+        "Cache-Control": "max-age=10",
+      },
     };
   }
 });
