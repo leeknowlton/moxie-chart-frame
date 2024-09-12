@@ -274,6 +274,10 @@ const frameHandler = frames(async (ctx) => {
         </Button>,
       ],
       state: { symbol: symbol },
+      dynamic: true,
+      headers: {
+        "Cache-Control": "max-age=10",
+      },
     };
   } catch (error) {
     console.error("Error fetching data:", error);
