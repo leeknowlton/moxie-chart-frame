@@ -116,9 +116,11 @@ const frameHandler = frames(async (ctx) => {
           </Button>,
         ],
         state: { symbol: symbol },
-        dynamic: true,
-        headers: {
-          "Cache-Control": "max-age=10",
+        imageOptions: {
+          dynamic: true,
+          headers: {
+            "Cache-Control": "max-age=10",
+          },
         },
       };
     }
@@ -278,9 +280,11 @@ const frameHandler = frames(async (ctx) => {
         </Button>,
       ],
       state: { symbol: symbol },
-      dynamic: true,
-      headers: {
-        "Cache-Control": "max-age=10",
+      imageOptions: {
+        dynamic: true,
+        headers: {
+          "Cache-Control": "max-age=10",
+        },
       },
     };
   } catch (error) {
@@ -311,9 +315,11 @@ const frameHandler = frames(async (ctx) => {
         </Button>,
       ],
       state: { symbol: symbol },
-      dynamic: true,
-      headers: {
-        "Cache-Control": "max-age=10",
+      imageOptions: {
+        dynamic: true,
+        headers: {
+          "Cache-Control": "max-age=10",
+        },
       },
     };
   }
